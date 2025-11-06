@@ -1,10 +1,10 @@
-<div class="min-h-screen bg-green-50/50 font-sans text-gray-800">
-  <header class="bg-white shadow-sm">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <h1 class="text-3xl font-bold text-green-800 tracking-tight">
+<div class="min-h-screen bg-stone-100 font-sans text-stone-800">
+  <header class="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <h1 class="text-3xl font-bold tracking-tight">
         🌵 Konfigurator Kaktusa 3D
       </h1>
-      <p class="text-gray-600 mt-1">Dostosuj każdy szczegół swojego wirtualnego kaktusa.</p>
+      <p class="text-emerald-100 mt-1">Dostosuj każdy szczegół swojego wirtualnego kaktusa.</p>
     </div>
   </header>
 
@@ -12,9 +12,9 @@
     <!-- Kolumna z Podglądem -->
     <div class="lg:col-span-2">
       <div class="sticky top-8">
-        <div class="bg-white h-[80vh] rounded-xl shadow-lg border border-gray-200 flex flex-col">
-          <div class="p-4 border-b">
-             <h3 class="text-lg font-semibold text-gray-700 text-center">Podgląd Modelu 3D</h3>
+        <div class="bg-white h-[80vh] rounded-xl shadow-lg border border-stone-200 flex flex-col">
+          <div class="p-4 border-b border-stone-200">
+             <h3 class="text-lg font-semibold text-stone-700 text-center">Podgląd Modelu 3D</h3>
           </div>
           <div class="flex-grow bg-grid-pattern relative">
             <app-cactus-viewer [config]="config()" class="absolute inset-0"></app-cactus-viewer>
@@ -26,8 +26,8 @@
     <!-- Kolumna z Kontrolkami -->
     <div class="lg:col-span-1 flex flex-col gap-6">
       <!-- Sekcja: Kształt Główny -->
-      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-        <h2 class="text-xl font-semibold text-green-700 border-b pb-3 mb-4">Kształt Główny</h2>
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-stone-200">
+        <h2 class="text-xl font-semibold text-emerald-700 border-b border-stone-200 pb-3 mb-4">Kształt Główny</h2>
         <div class="space-y-5">
           <app-slider-control
             label="Wysokość"
@@ -56,8 +56,8 @@
       </section>
 
       <!-- Sekcja: Odnogi / Ramiona -->
-      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-        <h2 class="text-xl font-semibold text-green-700 border-b pb-3 mb-4">Odnogi / Ramiona</h2>
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-stone-200">
+        <h2 class="text-xl font-semibold text-emerald-700 border-b border-stone-200 pb-3 mb-4">Odnogi / Ramiona</h2>
         <div class="space-y-5">
            <app-slider-control
             label="Ilość"
@@ -91,8 +91,8 @@
       </section>
 
       <!-- Sekcja: Detale i Dodatki -->
-      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-        <h2 class="text-xl font-semibold text-green-700 border-b pb-3 mb-4">Detale i Dodatki</h2>
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-stone-200">
+        <h2 class="text-xl font-semibold text-emerald-700 border-b border-stone-200 pb-3 mb-4">Detale i Dodatki</h2>
         <div class="space-y-5">
           <app-slider-control
             label="Gęstość kolców"
@@ -142,12 +142,14 @@
 
 <style>
   .bg-grid-pattern {
-    background-color: #f8fafc;
+    background-color: #fafaf9; /* stone-50 */
     background-image:
-      linear-gradient(rgba(107, 114, 128, 0.1) 1px, transparent 1px),
-      linear-gradient(to right, rgba(107, 114, 128, 0.1) 1px, transparent 1px);
+      linear-gradient(rgba(113, 113, 122, 0.1) 1px, transparent 1px),
+      linear-gradient(to right, rgba(113, 113, 122, 0.1) 1px, transparent 1px);
     background-size: 20px 20px;
   }
+  
+  /* --- New Slider Styles --- */
   input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
@@ -155,31 +157,44 @@
     cursor: pointer;
     outline: none;
     border-radius: 9999px;
-    height: 6px;
-    background: #e5e7eb;
+    height: 8px;
+    background: linear-gradient(to right, #059669 var(--value-percent), #e7e5e4 var(--value-percent)); /* emerald-600, stone-200 */
+    transition: background 0.1s ease-in-out;
   }
+
+  /* Thumb - Chrome, Safari, Opera, Edge */
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    height: 18px;
-    width: 18px;
-    background-color: #166534; /* green-800 */
+    height: 20px;
+    width: 20px;
+    background-color: #059669; /* emerald-600 */
     border-radius: 50%;
-    border: none;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     transition: background-color 0.2s ease-in-out;
+    margin-top: -6px; /* (thumb height - track height) / 2 */
   }
+
+  /* Thumb - Firefox */
   input[type="range"]::-moz-range-thumb {
-    height: 18px;
-    width: 18px;
-    background-color: #166534; /* green-800 */
+    height: 20px;
+    width: 20px;
+    background-color: #059669; /* emerald-600 */
     border-radius: 50%;
-    border: none;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     transition: background-color 0.2s ease-in-out;
   }
-  input[type="range"]:hover::-webkit-slider-thumb {
-    background-color: #15803d; /* green-700 */
+
+  /* Hover/Active States */
+  input[type="range"]:hover::-webkit-slider-thumb,
+  input[type="range"]:active::-webkit-slider-thumb {
+    background-color: #047857; /* emerald-700 */
   }
-  input[type="range"]:hover::-moz-range-thumb {
-    background-color: #15803d; /* green-700 */
+
+  input[type="range"]:hover::-moz-range-thumb,
+  input[type="range"]:active::-moz-range-thumb {
+    background-color: #047857; /* emerald-700 */
   }
 </style>

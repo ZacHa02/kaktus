@@ -1,3 +1,4 @@
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -70,7 +71,7 @@ export class CactusViewerComponent implements AfterViewInit, OnDestroy {
     const containerEl = this.container().nativeElement;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xf8fafc);
+    this.scene.background = new THREE.Color(0xfafaf9); // stone-50
 
     this.camera = new THREE.PerspectiveCamera(50, containerEl.clientWidth / containerEl.clientHeight, 0.1, 1000);
     this.camera.position.set(0, 1, 8);
@@ -103,9 +104,9 @@ export class CactusViewerComponent implements AfterViewInit, OnDestroy {
     this.cactusGroup = new THREE.Group();
     this.scene.add(this.cactusGroup);
     
-    this.bodyMaterial = new THREE.MeshStandardMaterial({ color: 0x228B22, roughness: 0.8 });
-    this.potMaterial = new THREE.MeshStandardMaterial({ color: 0xD2691E, roughness: 0.8 });
-    this.spineMaterial = new THREE.LineBasicMaterial({ color: 0xFFE4B5 });
+    this.bodyMaterial = new THREE.MeshStandardMaterial({ color: 0x365314, roughness: 0.8 }); // lime-900
+    this.potMaterial = new THREE.MeshStandardMaterial({ color: 0xBC6C25, roughness: 0.8 }); // Earthy brown/orange
+    this.spineMaterial = new THREE.LineBasicMaterial({ color: 0xFFFBEB }); // yellow-50
     this.flowerMaterials = [
         new THREE.MeshStandardMaterial({ color: 0xE60073, roughness: 0.6 }), // Deep Pink
         new THREE.MeshStandardMaterial({ color: 0x9C27B0, roughness: 0.6 }), // Purple
@@ -242,8 +243,13 @@ export class CactusViewerComponent implements AfterViewInit, OnDestroy {
         const verticalPart = armLength * 0.6;
 
         const armRandAngle = armPlacementRand() * Math.PI * 2;
-        const startX = Math.cos(armRandAngle) * width;
-        const startZ = Math.sin(armRandAngle) * width;
+        
+        // Apply the same rib logic to the arm's starting point to ensure it touches the body
+        const ribFactor = 1 - Math.cos(armRandAngle * ribs) * 0.1;
+        const effectiveRadius = width * ribFactor;
+        
+        const startX = Math.cos(armRandAngle) * effectiveRadius;
+        const startZ = Math.sin(armRandAngle) * effectiveRadius;
 
         const path = new THREE.CurvePath<THREE.Vector3>();
         const start = new THREE.Vector3(startX, armPosition, startZ);
@@ -270,6 +276,14 @@ export class CactusViewerComponent implements AfterViewInit, OnDestroy {
         armMesh.receiveShadow = true;
         armMesh.position.copy(cactusBody.position);
         this.cactusGroup.add(armMesh);
+        
+        // Add a sphere at the base to ensure a seamless connection and fill the hole
+        const startCapGeometry = new THREE.SphereGeometry(armThickness, ribs, Math.max(4, Math.floor(ribs / 2)));
+        const startCapMesh = new THREE.Mesh(startCapGeometry, this.bodyMaterial);
+        startCapMesh.position.copy(start).add(cactusBody.position);
+        startCapMesh.castShadow = true;
+        startCapMesh.receiveShadow = true;
+        this.cactusGroup.add(startCapMesh);
         
         const capGeometry = new THREE.SphereGeometry(armThickness, ribs, Math.max(4, Math.floor(ribs / 2)));
         const capMesh = new THREE.Mesh(capGeometry, this.bodyMaterial);

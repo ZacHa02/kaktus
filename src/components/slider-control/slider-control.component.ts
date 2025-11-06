@@ -1,13 +1,13 @@
 
-import { ChangeDetectionStrategy, Component, output, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, input, computed } from '@angular/core';
 
 @Component({
   selector: 'app-slider-control',
   template: `
     <div>
-      <div class="flex justify-between items-center mb-1">
-        <label [for]="label()" class="text-sm font-medium text-gray-700">{{ label() }}</label>
-        <span class="text-sm font-semibold text-green-800 bg-green-100 px-2 py-0.5 rounded-full">
+      <div class="flex justify-between items-center mb-1.5">
+        <label [for]="label()" class="text-sm font-medium text-stone-700">{{ label() }}</label>
+        <span class="text-sm font-medium text-stone-600">
           {{ value() }}{{ unit() ? ' ' + unit() : '' }}
         </span>
       </div>
@@ -19,6 +19,7 @@ import { ChangeDetectionStrategy, Component, output, input } from '@angular/core
         [max]="max()"
         [step]="step()"
         [value]="value()"
+        [style.--value-percent]="valuePercent() + '%'"
         (input)="onInputChange(slider.value)"
       />
     </div>
@@ -34,6 +35,12 @@ export class SliderControlComponent {
   unit = input<string>('');
 
   valueChange = output<number>();
+
+  valuePercent = computed(() => {
+    const range = this.max() - this.min();
+    if (range === 0) return 0;
+    return ((this.value() - this.min()) / range) * 100;
+  });
 
   onInputChange(value: string): void {
     this.valueChange.emit(parseFloat(value));
