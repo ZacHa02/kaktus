@@ -1,0 +1,5 @@
+{
+  "name": "Konfigurator Kaktusa 3D",
+  "description": "Aplikacja do wizualnej konfiguracji modeli 3D kaktusów przy użyciu intuicyjnych suwaków. Umożliwia dostosowanie geometrii, kolców, kwitnienia i innych dodatków.",
+  "requestFramePermissions": []
+}

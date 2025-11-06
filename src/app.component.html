@@ -1,0 +1,185 @@
+<div class="min-h-screen bg-green-50/50 font-sans text-gray-800">
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <h1 class="text-3xl font-bold text-green-800 tracking-tight">
+        🌵 Konfigurator Kaktusa 3D
+      </h1>
+      <p class="text-gray-600 mt-1">Dostosuj każdy szczegół swojego wirtualnego kaktusa.</p>
+    </div>
+  </header>
+
+  <main class="container mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Kolumna z Podglądem -->
+    <div class="lg:col-span-2">
+      <div class="sticky top-8">
+        <div class="bg-white h-[80vh] rounded-xl shadow-lg border border-gray-200 flex flex-col">
+          <div class="p-4 border-b">
+             <h3 class="text-lg font-semibold text-gray-700 text-center">Podgląd Modelu 3D</h3>
+          </div>
+          <div class="flex-grow bg-grid-pattern relative">
+            <app-cactus-viewer [config]="config()" class="absolute inset-0"></app-cactus-viewer>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kolumna z Kontrolkami -->
+    <div class="lg:col-span-1 flex flex-col gap-6">
+      <!-- Sekcja: Kształt Główny -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+        <h2 class="text-xl font-semibold text-green-700 border-b pb-3 mb-4">Kształt Główny</h2>
+        <div class="space-y-5">
+          <app-slider-control
+            label="Wysokość"
+            [min]="10" [max]="150" [step]="1" [value]="config().body.height"
+            unit="cm"
+            (valueChange)="updateBodyHeight($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Szerokość"
+            [min]="10" [max]="100" [step]="1" [value]="config().body.width"
+            unit="%"
+            (valueChange)="updateBodyWidth($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Liczba żeber"
+            [min]="5" [max]="20" [step]="1" [value]="config().body.ribs"
+            (valueChange)="updateBodyRibs($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Segmentacja"
+            [min]="0" [max]="100" [step]="1" [value]="config().body.segmentation"
+            unit="%"
+            (valueChange)="updateBodySegmentation($event)">
+          </app-slider-control>
+        </div>
+      </section>
+
+      <!-- Sekcja: Odnogi / Ramiona -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+        <h2 class="text-xl font-semibold text-green-700 border-b pb-3 mb-4">Odnogi / Ramiona</h2>
+        <div class="space-y-5">
+           <app-slider-control
+            label="Ilość"
+            [min]="0" [max]="10" [step]="1" [value]="config().arms.count"
+            (valueChange)="updateArmsCount($event)">
+          </app-slider-control>
+           <app-slider-control
+            label="Położenie"
+            [min]="0" [max]="100" [step]="1" [value]="config().arms.position"
+            unit="%"
+            (valueChange)="updateArmsPosition($event)">
+          </app-slider-control>
+           <app-slider-control
+            label="Długość"
+            [min]="10" [max]="100" [step]="1" [value]="config().arms.length"
+            unit="%"
+            (valueChange)="updateArmsLength($event)">
+          </app-slider-control>
+           <app-slider-control
+            label="Grubość"
+            [min]="10" [max]="100" [step]="1" [value]="config().arms.thickness"
+            unit="%"
+            (valueChange)="updateArmsThickness($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Losowość położenia"
+            [min]="1" [max]="1000" [step]="1" [value]="config().arms.placementSeed"
+            (valueChange)="updateArmsPlacementSeed($event)">
+          </app-slider-control>
+        </div>
+      </section>
+
+      <!-- Sekcja: Detale i Dodatki -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+        <h2 class="text-xl font-semibold text-green-700 border-b pb-3 mb-4">Detale i Dodatki</h2>
+        <div class="space-y-5">
+          <app-slider-control
+            label="Gęstość kolców"
+            [min]="0" [max]="100" [step]="1" [value]="config().spines.density"
+            unit="%"
+            (valueChange)="updateSpinesDensity($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Długość kolców"
+            [min]="1" [max]="50" [step]="1" [value]="config().spines.length"
+            unit="mm"
+            (valueChange)="updateSpinesLength($event)">
+          </app-slider-control>
+           <app-slider-control
+            label="Liczba kwiatów"
+            [min]="0" [max]="15" [step]="1" [value]="config().addons.flowers"
+            (valueChange)="updateAddonsFlowers($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Wielkość kwiatów"
+            [min]="0" [max]="100" [step]="1" [value]="config().addons.flowerSize"
+            unit="%"
+            (valueChange)="updateAddonsFlowerSize($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Zróżnicowanie wielkości"
+            [min]="0" [max]="100" [step]="1" [value]="config().addons.flowerSizeVariation"
+            unit="%"
+            (valueChange)="updateAddonsFlowerSizeVariation($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Wielkość doniczki"
+            [min]="20" [max]="100" [step]="1" [value]="config().addons.potSize"
+            unit="%"
+            (valueChange)="updateAddonsPotSize($event)">
+          </app-slider-control>
+          <app-slider-control
+            label="Ułożenie (Seed)"
+            [min]="1" [max]="1000" [step]="1" [value]="config().addons.seed"
+            (valueChange)="updateAddonsSeed($event)">
+          </app-slider-control>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<style>
+  .bg-grid-pattern {
+    background-color: #f8fafc;
+    background-image:
+      linear-gradient(rgba(107, 114, 128, 0.1) 1px, transparent 1px),
+      linear-gradient(to right, rgba(107, 114, 128, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    border-radius: 9999px;
+    height: 6px;
+    background: #e5e7eb;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    background-color: #166534; /* green-800 */
+    border-radius: 50%;
+    border: none;
+    transition: background-color 0.2s ease-in-out;
+  }
+  input[type="range"]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    background-color: #166534; /* green-800 */
+    border-radius: 50%;
+    border: none;
+    transition: background-color 0.2s ease-in-out;
+  }
+  input[type="range"]:hover::-webkit-slider-thumb {
+    background-color: #15803d; /* green-700 */
+  }
+  input[type="range"]:hover::-moz-range-thumb {
+    background-color: #15803d; /* green-700 */
+  }
+</style>
