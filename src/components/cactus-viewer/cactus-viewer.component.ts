@@ -243,13 +243,8 @@ export class CactusViewerComponent implements AfterViewInit, OnDestroy {
         const verticalPart = armLength * 0.6;
 
         const armRandAngle = armPlacementRand() * Math.PI * 2;
-        
-        // Apply the same rib logic to the arm's starting point to ensure it touches the body
-        const ribFactor = 1 - Math.cos(armRandAngle * ribs) * 0.1;
-        const effectiveRadius = width * ribFactor;
-        
-        const startX = Math.cos(armRandAngle) * effectiveRadius;
-        const startZ = Math.sin(armRandAngle) * effectiveRadius;
+        const startX = Math.cos(armRandAngle) * width;
+        const startZ = Math.sin(armRandAngle) * width;
 
         const path = new THREE.CurvePath<THREE.Vector3>();
         const start = new THREE.Vector3(startX, armPosition, startZ);
@@ -277,37 +272,7 @@ export class CactusViewerComponent implements AfterViewInit, OnDestroy {
         armMesh.position.copy(cactusBody.position);
         this.cactusGroup.add(armMesh);
         
-        // Add a sphere at the base to ensure a seamless connection and fill the hole
-        const startCapGeometry = new THREE.SphereGeometry(armThickness, ribs, Math.max(4, Math.floor(ribs / 2)));
-        const startCapPosAttr = startCapGeometry.attributes.position;
-        const startCapVertex = new THREE.Vector3();
-        for (let j = 0; j < startCapPosAttr.count; j++) {
-            startCapVertex.fromBufferAttribute(startCapPosAttr, j);
-            const angle = Math.atan2(startCapVertex.x, startCapVertex.z);
-            const ribFactor = 1 - Math.cos(angle * ribs) * 0.1;
-            startCapVertex.x *= ribFactor;
-            startCapVertex.z *= ribFactor;
-            startCapPosAttr.setXYZ(j, startCapVertex.x, startCapVertex.y, startCapVertex.z);
-        }
-        startCapGeometry.computeVertexNormals();
-        const startCapMesh = new THREE.Mesh(startCapGeometry, this.bodyMaterial);
-        startCapMesh.position.copy(start).add(cactusBody.position);
-        startCapMesh.castShadow = true;
-        startCapMesh.receiveShadow = true;
-        this.cactusGroup.add(startCapMesh);
-        
         const capGeometry = new THREE.SphereGeometry(armThickness, ribs, Math.max(4, Math.floor(ribs / 2)));
-        const capPosAttr = capGeometry.attributes.position;
-        const capVertex = new THREE.Vector3();
-        for (let j = 0; j < capPosAttr.count; j++) {
-            capVertex.fromBufferAttribute(capPosAttr, j);
-            const angle = Math.atan2(capVertex.x, capVertex.z);
-            const ribFactor = 1 - Math.cos(angle * ribs) * 0.1;
-            capVertex.x *= ribFactor;
-            capVertex.z *= ribFactor;
-            capPosAttr.setXYZ(j, capVertex.x, capVertex.y, capVertex.z);
-        }
-        capGeometry.computeVertexNormals();
         const capMesh = new THREE.Mesh(capGeometry, this.bodyMaterial);
         capMesh.position.copy(end).add(cactusBody.position);
         capMesh.castShadow = true;
